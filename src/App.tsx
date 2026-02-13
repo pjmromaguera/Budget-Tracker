@@ -3,6 +3,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { supabase } from "./lib/supabase";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Transactions from "./pages/Transactions";
+import Budgets from "./pages/Budgets";
+
+
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -27,6 +31,8 @@ export default function App() {
     <Routes>
       <Route path="/login" element={session ? <Navigate to="/" /> : <Login />} />
       <Route path="/" element={session ? <Dashboard /> : <Navigate to="/login" />} />
+      <Route path="/transactions" element={session ? <Transactions /> : <Navigate to="/login" />} />
+      <Route path="/budgets" element={session ? <Budgets /> : <Navigate to="/login" />} />
     </Routes>
   );
 }

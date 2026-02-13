@@ -1,16 +1,26 @@
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
 export default function Dashboard() {
-  return (
-    <div style={{ padding: 16, maxWidth: 1100, margin: "0 auto" }}>
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h2 style={{ margin: 0 }}>Dashboard</h2>
-        <button onClick={() => supabase.auth.signOut()}>Log out</button>
-      </header>
+  const [total, setTotal] = useState(0);
 
-      <p style={{ opacity: 0.8 }}>
-        Next: household setup, transactions, budgets, charts.
-      </p>
+  async function load() {
+    const { data } = await supabase.from("transactions").select("amount");
+    const sum = (data || []).reduce((a, b) => a + Number(b.amount), 0);
+    setTotal(sum);
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <h2>Dashboard</h2>
+      <h3>Total spent: ₱{total.toFixed(2)}</h3>
+
+      <a href="#/transactions">Transactions</a> |{" "}
+      <a href="#/budgets">Budgets</a>
     </div>
   );
 }
